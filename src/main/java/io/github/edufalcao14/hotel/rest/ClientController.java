@@ -1,50 +1,53 @@
 package io.github.edufalcao14.hotel.rest;
 
+import io.github.edufalcao14.hotel.dto.CheckInRequestDTO;
+import io.github.edufalcao14.hotel.model.entity.Accommodation;
 import io.github.edufalcao14.hotel.model.entity.Client;
+import io.github.edufalcao14.hotel.model.entity.Room;
 import io.github.edufalcao14.hotel.model.repository.ClientRepository;
-import io.github.edufalcao14.hotel.model.repository.OldClientRepository;
+import io.github.edufalcao14.hotel.model.repository.AccomodationRepository;
+import io.github.edufalcao14.hotel.model.repository.RoomRepository;
+import io.github.edufalcao14.hotel.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @RequestMapping("api/clients")
 public class ClientController {
 
-    private final ClientRepository repository;
-    private final OldClientRepository oldClientRepository;
-
+    private final HotelService hotelService;
     @Autowired
-    public ClientController(@RequestBody ClientRepository repository ,@RequestBody OldClientRepository oldClientRepository){
-        this.repository=repository;
-        this.oldClientRepository=oldClientRepository;
+    public ClientController(@RequestBody HotelService hotelService){
+       this.hotelService=hotelService;
     }
-
+    @PostMapping("/saveClient")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Client saveClient(@RequestBody Client client ){
+        return  hotelService.saveClient(client);
+    }
     @PostMapping("/checkIn")
     @ResponseStatus(HttpStatus.CREATED)
-    public Client checkIn(@RequestBody Client client){
-
-        return repository.save(client);
+    public Accommodation checkIn(@RequestBody CheckInRequestDTO checkInRequestDTO){
+    return hotelService.checkIn(checkInRequestDTO);
     }
 
     @GetMapping("/getClient={id}")
     public Client verifyClient (@PathVariable Integer id){
-        return repository.
-                findById(id).
-                orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+        return hotelService.getClient(id);
+    }
+    @GetMapping("/verifyByRoom={id}")
+    public Accommodation verifyByRoom (@PathVariable Integer id){
+       return hotelService.verifyByRoom(id);
     }
 
-
     @DeleteMapping("/checkOut={id}")
-    public void checkOut (@PathVariable Integer id){
-
-        repository
-                .findById(id)
-                .map(client ->{
-                    repository.delete(client);
-                    return Void.TYPE;
-                } ).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public void deleteClient (@PathVariable Integer id){
+        hotelService.deleteClient(id);
     }
 
 

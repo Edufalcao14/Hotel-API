@@ -1,12 +1,18 @@
 package io.github.edufalcao14.hotel.model.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Entity
 @Data
@@ -33,4 +39,6 @@ public class Room {
 
     @Column(nullable = true)
     private String observations;
+
+
 }
