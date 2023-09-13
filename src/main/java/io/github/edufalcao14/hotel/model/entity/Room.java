@@ -38,7 +38,8 @@ public class Room {
     private int size;
 
     @Column(nullable = true)
+    private boolean occuped=false;
+
+    @Column(nullable = true)
     private String observations;
-
-
 }

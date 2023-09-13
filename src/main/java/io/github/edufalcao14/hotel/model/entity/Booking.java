@@ -9,17 +9,14 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Accommodation {
+public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
@@ -60,6 +57,8 @@ public class Accommodation {
 
     @OneToOne
     private Room room;
+
+
     @PrePersist
     public void prePersist(){
         LocalDate start = checkInDate;

@@ -1,14 +1,10 @@
 package io.github.edufalcao14.hotel.model.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"phonenumber", "email"})})
 public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +21,7 @@ public class Client {
     private Integer id;
 
     @Column(nullable = false,length = 150)
-    private String completName;
+    private String name;
 
 
     @Column(nullable = true,length = 30)
@@ -41,8 +38,6 @@ public class Client {
 
     @JsonManagedReference
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Accommodation> accommodations = new ArrayList<>();
-
-
+    private List<Booking> currentBookings = new ArrayList<>();
 
 }
