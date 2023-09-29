@@ -4,6 +4,9 @@ import io.github.edufalcao14.hotel.dto.CheckInRequestDTO;
 import io.github.edufalcao14.hotel.model.entity.Booking;
 import io.github.edufalcao14.hotel.model.entity.BookingHistory;
 import io.github.edufalcao14.hotel.model.entity.Client;
+import io.github.edufalcao14.hotel.model.entity.Room;
+
+import java.util.List;
 
 public interface HotelService {
     Booking checkIn(CheckInRequestDTO checkInRequestDTO);
@@ -11,7 +14,13 @@ public interface HotelService {
     Client getClient (Integer id);
     Booking verifyAccommodation (Integer id);
     void deleteClient (Integer id);
-    Booking CheckOut (Integer Id);
+    void saveBookingToHistory(BookingHistory bookingHistory);
+
+    void addRoomToBooking(Integer bookingId, Room room);
+
+    List<Room> checkFreeRooms();
+
+    void CheckOut (Integer Id);
 
     BookingHistory getBookingHistoryForClient(Integer id);
 }

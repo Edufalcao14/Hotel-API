@@ -20,9 +20,9 @@ public class HotelApplication {
 
     @Bean
     public CommandLineRunner run(@Autowired ClientRepository repository ,@Autowired RoomRepository roomRepository ,@Autowired BookingRepository bookingRepository){
-        Room room = Room.builder().roomNumber(201).floor("parquet").side("jardin").size(35).build();
-        Room room2 = Room.builder().roomNumber(202).floor("tapis").side("rue").size(30).build();
-        Room room3 = Room.builder().roomNumber(403).floor("tapis VIP").side("jardin").size(35).build();
+        Room room = Room.builder().roomNumber(201).floor("parquet").side("jardin").size(35).tariffPerNight(100).build();
+        Room room2 = Room.builder().roomNumber(202).floor("tapis").side("rue").size(30).tariffPerNight(150).build();
+        Room room3 = Room.builder().roomNumber(403).floor("tapis VIP").side("jardin").size(35).tariffPerNight(90).build();
         roomRepository.save(room);
         roomRepository.save(room2);
         roomRepository.save(room3);
@@ -34,7 +34,6 @@ public class HotelApplication {
         Booking booking = Booking.builder().client(client)
                 .checkInDate(LocalDate.now())
                 .checkOutDate(LocalDate.of(2023,9,30))
-                .tariffPerNight(90)
                 .warrantyAmount(100.00)
                 .reduction(50)
                 .build();

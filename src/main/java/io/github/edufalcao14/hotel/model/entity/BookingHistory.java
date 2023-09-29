@@ -1,7 +1,6 @@
 package io.github.edufalcao14.hotel.model.entity;
 
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,13 +25,21 @@ public class BookingHistory {
     @JoinColumn(name = "id")
     private Client client;
 
-
-    @OneToMany( cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Booking> bookings = new ArrayList<>();
+    @OneToMany( cascade = CascadeType.DETACH)
+    private List<Booking> allBookings = new ArrayList<>();
 
     public BookingHistory(Client client){
         this.client = client;
     }
 
+    public void addBookingToHistory(Booking booking){
+        if (allBookings.contains(booking)) return;
+       allBookings.add(booking);
+    }
+    @PrePersist
+    public void prePersist(){
 
+
+
+    }
 }

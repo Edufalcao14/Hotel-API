@@ -37,7 +37,7 @@ public class Client {
     private String phoneNumber;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "client", cascade = CascadeType.DETACH)
     private List<Booking> currentBookings = new ArrayList<>();
 
 }

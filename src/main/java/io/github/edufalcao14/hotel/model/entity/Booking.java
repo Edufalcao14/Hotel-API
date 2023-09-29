@@ -2,6 +2,7 @@ package io.github.edufalcao14.hotel.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +11,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,9 +29,6 @@ public class Booking {
     @ManyToOne
     private Client client;
 
-    @Column(nullable = false)
-    private int tariffPerNight;
-
     @Column(nullable = false,length = 10)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate checkInDate;
@@ -38,10 +38,16 @@ public class Booking {
     private LocalDate checkOutDate;
 
     @Column(nullable = false)
+    private int numberOfRooms;
+
+    @Column(nullable = false)
     private double totalAmount;
 
     @Column(nullable = false)
     private double warrantyAmount;
+
+    @Column(nullable = true)
+    private double tariffPerNight;
 
     @Column(nullable = true,length = 200)
     private String observations;
@@ -55,9 +61,9 @@ public class Booking {
     @Column(nullable = true)
     private int reduction;
 
-    @OneToOne
-    private Room room;
-
+    @JsonManagedReference
+    @OneToMany(mappedBy = "booking", cascade = CascadeType.DETACH)
+    private List<Room> rooms = new ArrayList<>();
 
     @PrePersist
     public void prePersist(){
@@ -67,14 +73,13 @@ public class Booking {
         int days = (int) ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         setNumberOfDays(days);
 
-        int totalprice = numberOfDays*tariffPerNight;
-
-        setTotalAmount(totalprice);
         setWarrantyAmount(getWarrantyAmount());
+
+        double totalAmount = tariffPerNight*numberOfDays;
+        setTotalAmount(totalAmount);
         if (reduction != 0){
             setReduction(reduction);
-            totalprice-=reduction;
-            setTotalAmount(totalprice);
+            setTotalAmount(getTotalAmount()-reduction);
         }
     }
 }

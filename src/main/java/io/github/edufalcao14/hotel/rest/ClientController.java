@@ -4,10 +4,13 @@ import io.github.edufalcao14.hotel.dto.CheckInRequestDTO;
 import io.github.edufalcao14.hotel.model.entity.Booking;
 import io.github.edufalcao14.hotel.model.entity.BookingHistory;
 import io.github.edufalcao14.hotel.model.entity.Client;
+import io.github.edufalcao14.hotel.model.entity.Room;
 import io.github.edufalcao14.hotel.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/clients")
@@ -42,10 +45,12 @@ public class ClientController {
        return hotelService.verifyAccommodation(id);
     }
 
-    @DeleteMapping("/checkOut={id}")
-    public void deleteClient (@PathVariable Integer id){
-        hotelService.deleteClient(id);
+    @DeleteMapping("/checkOut/{bookingId}")
+    public void checkOut(@PathVariable Integer bookingId) {
+        hotelService.CheckOut(bookingId);
     }
-
-
+    @GetMapping("/checkFreeRooms")
+    public List<Room> checkFreeRooms(){
+        return hotelService.checkFreeRooms();
+    }
 }

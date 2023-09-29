@@ -42,4 +42,11 @@ public class Room {
 
     @Column(nullable = true)
     private String observations;
+
+    @Column(nullable = false)
+    private int tariffPerNight;
+    @JsonBackReference
+    @ManyToOne
+    private Booking booking;
+
 }
